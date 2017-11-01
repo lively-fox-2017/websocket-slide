@@ -17,9 +17,37 @@
         <section>Slide 8</section>
       </div>
     </div>
+    <script src="https://www.gstatic.com/firebasejs/4.6.0/firebase.js"></script>
+    <script type="text/javascript">
+    // Initialize Firebase
+    var config = {
+      apiKey: "AIzaSyAq9cUneEDlbC7wdexLy9VVciyv-bsu-Lc",
+      authDomain: "try-firebase-a36ae.firebaseapp.com",
+      databaseURL: "https://try-firebase-a36ae.firebaseio.com",
+      projectId: "try-firebase-a36ae",
+      storageBucket: "",
+      messagingSenderId: "545599801937"
+    };
+
+    firebase.initializeApp(config);
+
+    var db = firebase.database();
+    var remote = db.ref('remote/');
+    </script>
     <script src="reveal/js/reveal.js"></script>
     <script>
       Reveal.initialize();
+      
+      Reveal.addEventListener( 'slidechanged', function( event ) {
+        // event.previousSlide, event.currentSlide, event.indexh, event.indexv
+        const state = JSON.stringify(Reveal.getState())
+        remote.set(state);
+      });
+
+      remote.on('value', function(snapshot) {
+        const curentState = JSON.parse(snapshot.val());
+        Reveal.setState(curentState);
+      });
     </script>
   </body>
 </html>
